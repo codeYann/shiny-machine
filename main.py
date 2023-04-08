@@ -1,17 +1,18 @@
 from api.afn import AFN
 
-N = AFN([0, 1, 2, 3])
+N = AFN(["q0", "q1", "q2", "q3"])
 
-N.add_transition(0, "a", 0)
-N.add_transition(0, "b", 1)
-N.add_transition(1, "a", 1)
-N.add_transition(1, "b", 2)
-N.add_transition(2, "a", 3)
-N.add_transition(2, "b", 3)
-N.add_transition(3, "", 0)
-N.set_final_states([2])
+N.add_transition("q0", "0", "q0")
+N.add_transition("q0", "1", "q1")
+N.add_transition("q1", "0", "q1")
+N.add_transition("q1", "1", "q2")
+N.add_transition("q2", "0", "q3")
+N.add_transition("q2", "1", "q3")
+N.add_transition("q3", "1", "q0")
+N.add_transition("q3", "0", "q0")
+N.set_final_states(["q3"])
 
 if __name__ == "__main__":
-    print(N.transitions)
-    print(N.accepts("aaabb"))
-    print(N.counting_patterns("aaaabbabbabbabbabbb"))
+    # print(N.transitions)
+    print(N.counting_patterns("111111"))
+    # print(N.counting_patterns("aaaabbabbabbabbabbb"))
