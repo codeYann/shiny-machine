@@ -53,28 +53,21 @@ class AFN:
         return False
 
     def counting_patterns(self, chain: List[Symbol]) -> int:
+        print(f"len chain: {len(chain)}")
         count = 0
-        i = 0
-        while i < len(chain):
-            pointer = self.initial_state
-            last_symbol = None
-            while i < len(chain):
-                current_state = self.get_states(pointer, chain[i])
-                if current_state:
-                    last_symbol = chain[i]
-                    pointer = current_state.copy().pop()
-                    i += 1
-                else:
-                    break
-            if pointer in self.final_states and last_symbol is not None:
+        pointer = self.initial_state
+        current_state: Set[State] | None = None
+        for j in range(len(chain)):
+            if pointer in self.final_states:
+                print(f"index: {j}")
                 count += 1
-                # Recover last symbol and move back to initial state
-                current_state = self.get_states(pointer, last_symbol)
+                current_state = self.get_states(pointer, chain[j - 1])
                 pointer = current_state.copy().pop()
-            else:
-                # Move back to initial state without recovering last symbol
-                pointer = self.initial_state
-            if pointer not in self.transitions:
-                break
+
+            current_state = self.get_states(pointer, chain[j])
+            pointer = current_state.copy().pop()
+            print(
+                f"current_state => {current_state} symbol: {chain[j]} pointer => {pointer}, index => {j}"
+            )
 
         return count
