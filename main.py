@@ -13,6 +13,5 @@ N.add_transition("q3", "0", "q0")
 N.set_final_states(["q3"])
 
 if __name__ == "__main__":
-    # print(N.transitions)
-    print(N.counting_patterns("111111"))
-    # print(N.counting_patterns("aaaabbabbabbabbabbb"))
+    print(N.transitions)
+    print("counting:", N.counting_patterns("11100000000001111111"))
