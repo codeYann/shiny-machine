@@ -1,4 +1,4 @@
-from typing import List, Dict, Set
+from typing import List, Dict, Set, Tuple
 from collections import defaultdict
 
 State = int | str
@@ -53,21 +53,15 @@ class AFN:
         return False
 
     def counting_patterns(self, chain: List[Symbol]) -> int:
-        print(f"len chain: {len(chain)}")
         count = 0
         pointer = self.initial_state
         current_state: Set[State] | None = None
         for j in range(len(chain)):
             if pointer in self.final_states:
-                print(f"index: {j}")
                 count += 1
                 current_state = self.get_states(pointer, chain[j - 1])
                 pointer = current_state.copy().pop()
 
             current_state = self.get_states(pointer, chain[j])
             pointer = current_state.copy().pop()
-            print(
-                f"current_state => {current_state} symbol: {chain[j]} pointer => {pointer}, index => {j}"
-            )
-
         return count
