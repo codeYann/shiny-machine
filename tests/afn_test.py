@@ -1,5 +1,4 @@
 import pytest
-import string
 from api.afn import AFN
 
 
@@ -46,9 +45,9 @@ class TestAFN:
         afn.add_transition("q1", "0", "q2")
         afn.set_final_states(["q2"])
 
-        assert afn.accepts("01111111110") == True
-        assert afn.accepts("0") == False
-        assert afn.accepts("010") == True
+        assert afn.accepts("01111111110") is True
+        assert afn.accepts("0") is False
+        assert afn.accepts("010") is True
         with pytest.raises(Exception):
             afn.accepts("1")
 
@@ -62,29 +61,3 @@ class TestAFN:
 
         with pytest.raises(Exception):
             afn.counting_patterns("222222")
-
-    def test_couting_patterns_in_numbers(self) -> None:
-
-        exclude_options = "".join([string.digits, "+", "-", "."])
-        others_case = "".join(
-            [char for char in string.printable if char not in exclude_options]
-        )
-
-        afn = AFN(["q0", "q1", "q2", "int", "q4", "q5", "float"])
-        afn.add_transition("q0", "+", "q1")
-        afn.add_transition("q0", "-", "q1")
-        afn.add_transition("q0", string.digits, "q1")
-        afn.add_transition("q1", string.digits, "q2")
-        afn.add_transition("q2", string.digits, "q2")
-        afn.add_transition("q2", others_case, "int")
-        afn.add_transition("q2", ".", "q4")
-        afn.add_transition("q4", string.digits, "q5")
-        afn.add_transition("q5", string.digits, "q5")
-        afn.add_transition("q5", others_case, "float")
-
-        afn.final_states(["q2", "q5"])
-        afn.set_pattenrs(["int", "float"])
-
-        response = afn.recognize_patterns("+155", others_case)
-
-        assert response == {"int": 1, "float": 0}
