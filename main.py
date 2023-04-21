@@ -1,17 +1,30 @@
-from api.afn import AFN
+from api.afnp import AFNP
+from string import digits
 
-N = AFN(["q0", "q1", "q2", "q3", "q4"])
+afnp = AFNP(["q0", "q1", "q2", "int", "q4", "q5", "float"])
+afnp.add_transition("q0", "+", "q1")
+afnp.add_transition("q0", "-", "q1")
+afnp.add_transition("q0", digits, "q2")
+afnp.add_transition("q2", digits, "q2")
+afnp.add_transition("q1", digits, "q2")
+afnp.add_transition("q2", afnp.else_case, "int")
+afnp.add_transition("q2", ".", "q4")
+afnp.add_transition("int", afnp.else_case, "q0")
+afnp.add_transition("int", digits, "q0")
+afnp.add_transition("q4", digits, "q5")
+afnp.add_transition("q5", digits, "q5")
+afnp.add_transition("q5", afnp.else_case, "float")
+afnp.add_transition("float", digits, "q0")
+afnp.add_transition("float", afnp.else_case, "q0")
 
-N.add_transition("q0", "0", "q0")
-N.add_transition("q0", "1", "q1")
-N.add_transition("q1", "0", "q1")
-N.add_transition("q1", "1", "q2")
-N.add_transition("q2", "0", "q3")
-N.add_transition("q2", "1", "q3")
-N.add_transition("q3", "1", "q0")
-N.add_transition("q3", "0", "q0")
-N.set_final_states(["q3"])
+
+afnp.set_final_states(["int", "float"])
+afnp.set_patterns(["int", "float"])
 
 if __name__ == "__main__":
-    print(N.transitions)
-    print("counting:", N.counting_patterns("11100000000001111111"))
+    try:
+        input = "+128312a29123910-23123b-222b+1555.03a"
+        response = afnp.counting_patterns(input)
+        print(f"input => {input} \noutput => {response}")
+    except Exception as e:
+        print(e)
