@@ -5,29 +5,23 @@ from .afn import AFN, State, Symbol
 
 
 class AFNP(AFN):
-    def __init__(self, list_states: List[State]) -> None:
-        super().__init__(list_states)
+    def __init__(self, states: List[State]) -> None:
+        super().__init__(states)
         exclude_options = "".join([digits, "."])
         self.else_case = "".join([c for c in printable if c not in exclude_options])
-        self.patterns: Set[State] = set()
-
-    def set_patterns(self, patterns: List[State]) -> None:
-        self.patterns = set(patterns)
 
     def get_states(self, src_state: State, symbol: Symbol) -> Set[State]:
         if (
             digits in [keys for keys in self.transitions[src_state].keys()]
             and symbol in digits
         ):
-            symbol = digits
-            return self.transitions[src_state][symbol]
+            return self.transitions[src_state][digits]
 
         if (
             self.else_case in [keys for keys in self.transitions[src_state].keys()]
             and symbol in self.else_case
         ):
-            symbol = self.else_case
-            return self.transitions[src_state][symbol]
+            return self.transitions[src_state][self.else_case]
 
         if src_state not in self.transitions:
             raise Exception(
