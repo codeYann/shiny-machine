@@ -6,21 +6,21 @@ Symbol = str
 
 
 class AFN:
-    def __init__(self, list_states: List[State]) -> None:
-        self.list_states: List[State] = list_states
-        self.initial_state: State = list_states[0]
+    def __init__(self, states: List[State]) -> None:
+        self.states = set(states)
+        self.initial_state = states[0]
         self.transitions: Dict[State, Dict[Symbol, Set[State]]] = defaultdict(
             lambda: defaultdict(set)
         )
-        self.final_states: Set[State] = set()
+        self.final_states = set()
 
     def add_transition(
         self, src_state: State, symbol: Symbol, dst_state: State
     ) -> None:
-        if src_state not in self.list_states:
+        if src_state not in self.states:
             raise ValueError(f"{src_state} state is not in set of state")
 
-        if dst_state not in self.list_states:
+        if dst_state not in self.states:
             raise ValueError(f"{dst_state} state is not in set of state")
 
         if src_state not in self.transitions:
