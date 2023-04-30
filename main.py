@@ -16,10 +16,7 @@ afnp.add_transition("q5", digits, "q5")
 afnp.add_transition("q5", afnp.else_case, "float")
 afnp.add_transition("float", digits, "q0")
 afnp.add_transition("float", afnp.else_case, "q0")
-
-
 afnp.set_final_states(["int", "float"])
-afnp.set_patterns(["int", "float"])
 
 if __name__ == "__main__":
     try:
